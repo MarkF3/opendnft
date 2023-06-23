@@ -1,19 +1,19 @@
 {
   "canisters": {
-    "opend2_backend": {
-      "main": "src/opend2_backend/main.mo",
+    "opend_backend": {
+      "main": "src/opend_backend/main.mo",
       "type": "motoko"
     },
-    "opend2_frontend": {
+    "opend_frontend": {
       "dependencies": [
-        "opend2_backend"
+        "opend_backend"
       ],
       "frontend": {
-        "entrypoint": "src/opend2_frontend/src/index.html"
+        "entrypoint": "src/opend_frontend/src/index.html"
       },
       "source": [
-        "src/opend2_frontend/assets",
-        "dist/opend2_frontend/"
+        "src/opend_frontend/assets",
+        "dist/opend_frontend/"
       ],
       "type": "assets"
     }
