@@ -1,6 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { opend_backend } from "../../../declarations/opend_backend"
+import { ListGroup } from "../../../../node_modules/react-bootstrap/esm/index";
+import { Principal } from "@dfinity/principal";
 
 function Minter() {
+
+
+ const {register, handleSubmit} = useForm();
+
+async function onSubmit(data) {
+
+  const name = data.name;
+  const image = data.image[0];
+  const imageArray = await image.arrayBuffer();
+  const imageByte = [...new Uint8Array(imageArray)];
+  const newNFTID = await opend_backend.mint(imageByte, name)
+
+
+console.log(newNFTID.toText());
+console.log(data.name);
+console.log(data.image);
+
+}
+
+
   return (
     <div className="minter-container">
       <h3 className="makeStyles-title-99 Typography-h3 form-Typography-gutterBottom">
@@ -12,6 +36,7 @@ function Minter() {
       <form className="makeStyles-form-109" noValidate="" autoComplete="off">
         <div className="upload-container">
           <input
+           {...register("image", {required: true}) }
             className="upload"
             type="file"
             accept="image/x-png,image/jpeg,image/gif,image/svg+xml,image/webp"
@@ -23,15 +48,17 @@ function Minter() {
         <div className="form-FormControl-root form-TextField-root form-FormControl-marginNormal form-FormControl-fullWidth">
           <div className="form-InputBase-root form-OutlinedInput-root form-InputBase-fullWidth form-InputBase-formControl">
             <input
+              {...register("name", {required: true})}
               placeholder="e.g. CryptoDunks"
               type="text"
               className="form-InputBase-input form-OutlinedInput-input"
+              
             />
             <fieldset className="PrivateNotchedOutline-root-60 form-OutlinedInput-notchedOutline"></fieldset>
           </div>
         </div>
         <div className="form-ButtonBase-root form-Chip-root makeStyles-chipBlue-108 form-Chip-clickable">
-          <span className="form-Chip-label">Mint NFT</span>
+          <span onClick={handleSubmit(onSubmit)}className="form-Chip-label">Mint NFT</span>
         </div>
       </form>
     </div>
