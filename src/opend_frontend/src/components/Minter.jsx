@@ -3,11 +3,14 @@ import { useForm } from "react-hook-form";
 import { opend_backend } from "../../../declarations/opend_backend"
 import { ListGroup } from "../../../../node_modules/react-bootstrap/esm/index";
 import { Principal } from "@dfinity/principal";
+import Item from "./Item";
 
 function Minter() {
 
 
  const {register, handleSubmit} = useForm();
+ const [nftPrincipal, setNFTPrincipal] = useState("");
+
 
 async function onSubmit(data) {
 
@@ -21,8 +24,10 @@ async function onSubmit(data) {
 console.log(newNFTID.toText());
 console.log(data.name);
 console.log(data.image);
-
+setNFTPrincipal(newNFTID);
 }
+
+if (nftPrincipal == "") {
 
 
   return (
@@ -63,6 +68,19 @@ console.log(data.image);
       </form>
     </div>
   );
+} else {
+
+return (<div className="minter-container">
+
+        <h3 className="Typography-root makeStyles-title-99 Typography-h3 form-Typography-gutterBottom">
+          Minted!
+        </h3>
+        <div className="horizontal-center">
+          <Item id={nftPrincipal.toText()} />
+        </div>
+      </div>)
+
+}
 }
 
 export default Minter;
