@@ -4,12 +4,15 @@ import logo from "../../assets/logo.png";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../declarations/nft";
 import { Principal } from "@dfinity/principal";
+import Button from "./button";
 
 function Item(props) {
 
   const [name, setName] = useState();
   const [owner, setOwner] = useState();
   const [image, setImage] = useState();
+  const [button, setButton] = useState();
+  const [priceInput, setPriceInput] = useState();
 
   const id = props.id;
 
@@ -27,19 +30,47 @@ function Item(props) {
     
 
     const name = await NFTActor.getName();
-    setName(name);
+    
 
     const owner =  await NFTActor.getOwner();
-    setOwner(owner.toText());
+  
   
 
     const imageData = await NFTActor.getImage();
     const imageContent = new Uint8Array(imageData);
     const image = URL.createObjectURL(new Blob([imageContent.buffer], {type: "image/png"}));
+
+
+    setOwner(owner.toText());
+    setName(name);
     setImage(image);
+    setButton(<Button handleClick={handleSell} text={"Sell"}/>);
+
+
+
   }
 
 useEffect(() => {loadNFT();}, []);
+
+function handleSell() {
+
+  var price;
+
+console.log("sell clicked");
+setPriceInput(<input
+  placeholder="Price in Coin"
+  type="number"
+  className="price-input"
+  value={price}
+  onChange={(e) => price = e.target.value}
+  />
+  );
+  setButton(<Button handleClick={handleSell} text={"Confirm"}/>);
+
+}
+
+
+
 
 
   return (
@@ -56,6 +87,8 @@ useEffect(() => {loadNFT();}, []);
           <p className="disTypography-root makeStyles-bodyText-24 disTypography-body2 disTypography-colorTextSecondary">
             Owner: {owner}
           </p>
+          {priceInput}
+          {button}
         </div>
       </div>
     </div>
