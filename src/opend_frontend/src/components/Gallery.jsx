@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Item from "./Item";
 import { Principal } from "@dfinity/principal";
+import Header from "./Header";
 
 function Gallery(props) {
 
@@ -23,6 +24,7 @@ setItems(props.ids.map((NFTId) => (
  useEffect(() => {fetchNFTs();}, [])
 
   return (
+    
     <div className="gallery-view">
       <h3 className="makeStyles-title-99 Typography-h3">{props.title}</h3>
       <div className="disGrid-root disGrid-container disGrid-spacing-xs-2">

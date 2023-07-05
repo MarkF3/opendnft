@@ -22,7 +22,7 @@ const [userOwnedGallery, setOwnedGallery] = useState();
 
 
   return (
-    <BrowserRouter>
+    <BrowserRouter >
     <div className="app-root-1">
       <header className="Paper-root AppBar-root AppBar-positionStatic AppBar-colorPrimary Paper-elevation4">
         <div className="Toolbar-root Toolbar-regular header-appBar-13 Toolbar-gutters">
@@ -57,7 +57,7 @@ const [userOwnedGallery, setOwnedGallery] = useState();
     <Route path="/discover"> <h1> Discover </h1></Route>
     <Route path="/minter"> <Minter /> </Route>
     <Route path="/collection"> {userOwnedGallery} </Route>
-    <Route path="/">
+    <Route exact path="/">
     <img className="bottom-space" src={homeImage} />
     </Route>
     </Switch>
