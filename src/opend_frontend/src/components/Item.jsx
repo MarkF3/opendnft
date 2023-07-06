@@ -13,7 +13,7 @@ function Item(props) {
   const [image, setImage] = useState();
   const [button, setButton] = useState();
   const [priceInput, setPriceInput] = useState();
-
+  let price;
   const id = props.id;
 
   const localhost = "http://localhost:8080/";
@@ -54,7 +54,7 @@ useEffect(() => {loadNFT();}, []);
 
 function handleSell() {
 
-  var price;
+  
 
 console.log("sell clicked");
 setPriceInput(<input
@@ -65,11 +65,15 @@ setPriceInput(<input
   onChange={(e) => price = e.target.value}
   />
   );
-  setButton(<Button handleClick={handleSell} text={"Confirm"}/>);
+  setButton(<Button handleClick={sellItem} text={"Confirm"}/>);
 
 }
 
+async function sellItem(){
 
+console.log("Sell Item active " + price);
+
+}
 
 
 
