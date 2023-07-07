@@ -5,6 +5,7 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../declarations/nft";
 import { Principal } from "@dfinity/principal";
 import Button from "./button";
+import {opend_backend } from "../../../declarations/opend_backend"
 
 function Item(props) {
 
@@ -13,7 +14,7 @@ function Item(props) {
   const [image, setImage] = useState();
   const [button, setButton] = useState();
   const [priceInput, setPriceInput] = useState();
-  let price;
+
   const id = props.id;
 
   const localhost = "http://localhost:8080/";
@@ -52,6 +53,9 @@ function Item(props) {
 
 useEffect(() => {loadNFT();}, []);
 
+
+let price;
+
 function handleSell() {
 
   
@@ -72,7 +76,8 @@ setPriceInput(<input
 async function sellItem(){
 
 console.log("Sell Item active " + price);
-
+const listingResult = await opend_backend.listItem(props.id, Number(price));
+console.log(listingResult);
 }
 
 
