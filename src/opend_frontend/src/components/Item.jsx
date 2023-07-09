@@ -19,10 +19,14 @@ function Item(props) {
 
   const localhost = "http://localhost:8080/";
   const agent = new HttpAgent({host: localhost});
+  //Remove below line when deploying project
+  agent.fetchRootKey();
+  let NFTActor;
+
 
   async function loadNFT() {
 
-    const NFTActor = await Actor.createActor(idlFactory, {
+    NFTActor = await Actor.createActor(idlFactory, {
     agent,
     canisterId: id
 
@@ -78,6 +82,12 @@ async function sellItem(){
 console.log("Sell Item active " + price);
 const listingResult = await opend_backend.listItem(props.id, Number(price));
 console.log(listingResult);
+if (listingResult == "success"){
+const openDId = await opend_backend.getOpenDCanisterID();
+console.log(openDId);
+const transferResult = await NFTActor.transferOwnership(openDId);
+console.log(transferResult);
+}
 }
 
 

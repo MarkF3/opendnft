@@ -92,9 +92,13 @@ return "success";
 }
 
 
+};
 
+public query func getOpenDCanisterID(): async Principal {
 
+Principal.fromActor(OpenD);
 
 }
+
 
 };
