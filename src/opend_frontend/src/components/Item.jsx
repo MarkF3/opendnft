@@ -14,6 +14,9 @@ function Item(props) {
   const [image, setImage] = useState();
   const [button, setButton] = useState();
   const [priceInput, setPriceInput] = useState();
+  const [loaderHidden, setLoaderHidden] = useState(true);
+  const [blur, setBlur] = useState();
+  const [sellStatus, setSellStatus] = useState("");
 
   const id = props.id;
 
@@ -49,7 +52,19 @@ function Item(props) {
     setOwner(owner.toText());
     setName(name);
     setImage(image);
-    setButton(<Button handleClick={handleSell} text={"Sell"}/>);
+
+    const nftIsListed = await opend_backend.isListed(props.id);
+    if(nftIsListed) {
+      setOwner("OpenD");
+      setBlur({filter: "blur(4px)"})
+       }else {
+
+        setButton(<Button handleClick={handleSell} text={"Sell"}/>);
+       }
+
+
+    
+
 
 
 
@@ -63,7 +78,7 @@ let price;
 function handleSell() {
 
   
-
+  setBlur({filter: "blur(4px)"});
 console.log("sell clicked");
 setPriceInput(<input
   placeholder="Price in Coin"
@@ -79,6 +94,7 @@ setPriceInput(<input
 
 async function sellItem(){
 
+setLoaderHidden(false);
 console.log("Sell Item active " + price);
 const listingResult = await opend_backend.listItem(props.id, Number(price));
 console.log(listingResult);
@@ -87,6 +103,15 @@ const openDId = await opend_backend.getOpenDCanisterID();
 console.log(openDId);
 const transferResult = await NFTActor.transferOwnership(openDId);
 console.log(transferResult);
+if(listingResult == "success") {
+  setLoaderHidden(true);
+  setOwner("OpenD");
+  setButton();
+  setPriceInput();
+  setSellStatus("Listed")
+
+}
+
 }
 }
 
@@ -98,10 +123,19 @@ console.log(transferResult);
         <img
           className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
           src={image}
+          style={blur}
         />
+         <div hidden={loaderHidden} className="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
         <div className="disCardContent-root">
           <h2 className="disTypography-root makeStyles-bodyText-24 disTypography-h5 disTypography-gutterBottom">
-            {name}<span className="purple-text"></span>
+            {name}<span className="purple-text">
+               {sellStatus}
+            </span>
           </h2>
           <p className="disTypography-root makeStyles-bodyText-24 disTypography-body2 disTypography-colorTextSecondary">
             Owner: {owner}
