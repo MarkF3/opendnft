@@ -53,6 +53,8 @@ function Item(props) {
     setName(name);
     setImage(image);
 
+    if (props.role == "collection") {
+
     const nftIsListed = await opend_backend.isListed(props.id);
     if(nftIsListed) {
       setOwner("OpenD");
@@ -61,13 +63,11 @@ function Item(props) {
 
         setButton(<Button handleClick={handleSell} text={"Sell"}/>);
        }
+       } else if(props.role == "discover") {
 
+        setButton(<Button handleClick={handleBuy} text={"Buy"}/>);
 
-    
-
-
-
-
+       }
   }
 
 useEffect(() => {loadNFT();}, []);
@@ -113,6 +113,14 @@ if(listingResult == "success") {
 }
 
 }
+}
+
+
+
+async function handleBuy() {
+
+
+  
 }
 
 
