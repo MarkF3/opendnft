@@ -7,6 +7,7 @@ import { Principal } from "@dfinity/principal";
 import Button from "./button";
 import {opend_backend } from "../../../declarations/opend_backend"
 import CURRENT_USER_ID from "../index";
+import PriceLabel from "./PriceLabel";
 
 function Item(props) {
 
@@ -18,6 +19,7 @@ function Item(props) {
   const [loaderHidden, setLoaderHidden] = useState(true);
   const [blur, setBlur] = useState();
   const [sellStatus, setSellStatus] = useState("");
+  const [priceLabel, setPriceLabel] = useState();
 
   const id = props.id;
 
@@ -54,15 +56,17 @@ function Item(props) {
     setName(name);
     setImage(image);
 
+    console.log("the role is " + props.role)
     if (props.role == "collection") {
 
     const nftIsListed = await opend_backend.isListed(props.id);
+    console.log("nft listed is " + nftIsListed);
 
-    if(nftIsListed) {
+    if(nftIsListed == true) {
       setOwner("OpenD");
       setBlur({filter: "blur(4px)"})
       setSellStatus("Listed");
-       }else {
+       }else{
 
         setButton(<Button handleClick={handleSell} text={"Sell"}/>);
        }
@@ -71,11 +75,12 @@ function Item(props) {
         if(originalOwner.toText() != CURRENT_USER_ID.toText()){
 
         setButton(<Button handleClick={handleBuy} text={"Buy"}/>);
-      } else {
+      } 
 
+      //price here
 
-        
-      }
+      const itemPrice = await opend_backend.getListedNFTPrice(props.id);
+      setPriceLabel(<PriceLabel sellPrice={itemPrice.toString()} />)
 
        }
   }
@@ -150,6 +155,7 @@ async function handleBuy() {
         <div></div>
       </div>
         <div className="disCardContent-root">
+          {priceLabel}
           <h2 className="disTypography-root makeStyles-bodyText-24 disTypography-h5 disTypography-gutterBottom">
             {name}<span className="purple-text">
                {sellStatus}
