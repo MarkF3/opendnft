@@ -3,6 +3,7 @@ import logo from "../../assets/logo.png";
 
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../../declarations/nft";
+import { idlFactory as tokenIdlFactory } from "../../../declarations/token_backend";
 import { Principal } from "@dfinity/principal";
 import Button from "./button";
 import {opend_backend } from "../../../declarations/opend_backend"
@@ -25,6 +26,8 @@ function Item(props) {
 
   const localhost = "http://localhost:8080/";
   const agent = new HttpAgent({host: localhost});
+
+
   //Remove below line when deploying project
   agent.fetchRootKey();
   let NFTActor;
@@ -134,8 +137,25 @@ if(listingResult == "success") {
 
 async function handleBuy() {
 
+  console.log("buy triggered");
 
-  
+const tokenActor = await Actor.createActor(tokenIdlFactory, {
+  agent,
+  canisterId: Principal.fromText("aax3a-h4aaa-aaaaa-qaahq-cai")
+})
+
+
+const sellerId = await opend_backend.getOriginalOwner(props.id)
+const itemPrice = await opend_backend.getListedNFTPrice(props.id)
+
+const result = await tokenActor.transfer(sellerId, itemPrice)
+if(result == "Done!"){
+  //Transfer Ownership
+
+
+
+}
+console.log(result);
 }
 
 
