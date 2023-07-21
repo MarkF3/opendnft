@@ -151,7 +151,8 @@ const itemPrice = await opend_backend.getListedNFTPrice(props.id)
 const result = await tokenActor.transfer(sellerId, itemPrice)
 if(result == "Done!"){
   //Transfer Ownership
-
+const transferResult = await opend_backend.completePurchase(props.id, sellerId, CURRENT_USER_ID);
+console.log(transferResult);
 
 
 }

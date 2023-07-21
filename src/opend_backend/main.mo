@@ -4,6 +4,7 @@ import NFTActorClass "../NFT/nft";
 import HashMap "mo:base/HashMap";
 import List "mo:base/List";
 import Iter "mo:base/Iter";
+import Text "mo:base/Text";
 
 
 
@@ -24,7 +25,7 @@ actor OpenD {
     public shared(msg) func mint(imgData: [Nat8], name: Text): async Principal {
 
 
-    Cycles.add(100_500_000_000);
+    Cycles.add(100_692_307_692);
     let owner : Principal = msg.caller;
     let newNFT = await NFTActorClass.NFT(name, owner, imgData);
 
@@ -146,6 +147,40 @@ return listing.itemPrice;
 
 };
 
+
+public shared(msg) func completePurchase(id: Principal, ownerId: Principal, newOwnerId: Principal): async Text {
+
+var purchasedNFT : NFTActorClass.NFT = switch (mapOfNFTs.get(id)) {
+    case null return "nft does not exist";
+    case (?result) result
+
+
+};
+
+let transferResult = await purchasedNFT.transferOwnership(newOwnerId); 
+
+if(transferResult == "Success") {
+
+    mapOfListings.delete(id);
+    var ownedNFTs : List.List<Principal> = switch (mapOfOwners.get(ownerId)) {
+        case null List.nil<Principal>();
+        case (?result) result;
+
+    };
+    ownedNFTs := List.filter(ownedNFTs, func (listItemId: Principal): Bool{
+        return listItemId != id;
+
+    });
+    addToOwnerMap(newOwnerId, id);
+    return "Success"
+
+
+} else {
+
+    return transferResult;
+}
+
+}
 
 
 
